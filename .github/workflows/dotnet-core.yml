@@ -22,6 +22,6 @@ jobs:
     - name: Build
       run: dotnet build Skoggy.Grove --configuration Release --no-restore
     - name: Pack
-      run: dotnet pack Skoggy.Grove -p:PackageVersion=1.0.${{ GITHUB_RUN_NUMBER }} --configuration Release --no-restore
+      run: dotnet pack Skoggy.Grove -p:PackageVersion=1.0.$GITHUB_RUN_NUMBER --configuration Release --no-restore
     - name: Publish
       run: dotnet nuget push Skoggy.Grove/bin/Release/Skoggy.Grove.*.nupkg --source ${{ secrets.NUGET_FEED }} --api-key ${{ secrets.NUGET_API_KEY }}
