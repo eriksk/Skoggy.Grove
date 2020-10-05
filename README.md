@@ -1,0 +1,2 @@
+# Skoggy.Grove
+MonoGame ClassLib
