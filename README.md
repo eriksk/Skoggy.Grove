@@ -4,11 +4,13 @@ Classlib for MonoGame
 
 ## Working on
 
-* Animations (Frame based)
+* nothin'
 
 ## Features Implemented
 
-* nothing :'(
+* Animations (Frame based)
+* Timers
+* Poolable collection
 
 ## Backlog
 
@@ -28,7 +30,6 @@ Classlib for MonoGame
 * Networking (maybe)
 * Nuget package
 * Particle System
-* Poolable collection
 * PostFx Pipeline
 * Random for float
 * Scene Graph
@@ -36,6 +37,5 @@ Classlib for MonoGame
 * Shape Renderer
 * SpriteBatch Extensions
 * Tiled support
-* Timers
 * Tweens
 * UI lib
