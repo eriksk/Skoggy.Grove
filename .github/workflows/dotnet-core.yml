@@ -23,3 +23,5 @@ jobs:
       run: dotnet build Skoggy.Grove --configuration Release --no-restore
     - name: Pack
       run: dotnet pack Skoggy.Grove --configuration Release --no-restore
+    - name: Publish
+      run: dotnet nuget push Skoggy.Grove\bin\Release\Skoggy.Grove.1.0.0.nupkg --source $NUGET_FEED --api-key $NUGET_API_KEY
