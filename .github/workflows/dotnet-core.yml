@@ -21,5 +21,3 @@ jobs:
       run: dotnet restore Skoggy.Grove
     - name: Build
       run: dotnet build Skoggy.Grove --configuration Release --no-restore
-    - name: Test
-      run: dotnet test --no-restore --verbosity normal
