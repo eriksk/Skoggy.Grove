@@ -18,8 +18,8 @@ jobs:
       with:
         dotnet-version: 3.1.301
     - name: Install dependencies
-      run: dotnet restore
+      run: dotnet restore Skoggy.Grove
     - name: Build
-      run: dotnet build Skoggy.Grove/Skoggy.Grove.csproj --configuration Release --no-restore
+      run: dotnet build Skoggy.Grove --configuration Release --no-restore
     - name: Test
       run: dotnet test --no-restore --verbosity normal
