@@ -4,7 +4,7 @@ Classlib for MonoGame
 
 ## Working on
 
-* nothing :(
+* Animations (Frame based)
 
 ## Features Implemented
 
@@ -12,7 +12,6 @@ Classlib for MonoGame
 
 ## Backlog
 
-* Animations (Frame based)
 * Atlas textures
 * Audio Helpers
 * Camera2D
