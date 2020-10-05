@@ -21,3 +21,5 @@ jobs:
       run: dotnet restore Skoggy.Grove
     - name: Build
       run: dotnet build Skoggy.Grove --configuration Release --no-restore
+    - name: Pack
+      run: dotnet pack Skoggy.Grove --configuration Release --no-restore
