@@ -11,6 +11,7 @@ Classlib for MonoGame
 * Animations (Frame based)
 * Timers
 * Poolable collection
+* Generic FSM
 
 ## Backlog
 
@@ -22,7 +23,6 @@ Classlib for MonoGame
 * Coroutines
 * Diagnostics
 * Event System
-* Generic FSM
 * Input Management
 * Math lib
 * Module System
