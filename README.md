@@ -12,6 +12,7 @@ Classlib for MonoGame
 * Timers
 * Poolable collection
 * Generic FSM
+* Sprite Sheets
 
 ## Backlog
 

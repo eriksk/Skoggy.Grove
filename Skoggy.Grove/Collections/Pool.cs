@@ -1,3 +1,4 @@
+using System;
 
 namespace Skoggy.Grove.Collections
 {
@@ -30,7 +31,7 @@ namespace Skoggy.Grove.Collections
         {
             if (_count > _capacity - 1)
             {
-                return null;
+                throw new InvalidOperationException("Pool is empty");
             }
 
             return _items[_count++];
@@ -38,8 +39,8 @@ namespace Skoggy.Grove.Collections
 
         public void Push(int index)
         {
-            if (_count == 0) return;
-            if (index > _count - 1) return;
+            if (_count == 0) throw new ArgumentOutOfRangeException(nameof(index));
+            if (index > _count - 1) throw new ArgumentOutOfRangeException(nameof(index));
 
             var temp = _items[_count - 1];
             _items[_count - 1] = _items[index];

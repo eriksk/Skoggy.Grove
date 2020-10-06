@@ -1,4 +1,3 @@
-
 using System;
 using Skoggy.Grove.Timers;
 
@@ -6,9 +5,9 @@ namespace Skoggy.Grove.Animations
 {
     public class Animation
     {
-        public int[] Frames { get; }
-        public bool Loop { get; }
-        public float Duration { get; }
+        public readonly int[] Frames;
+        public readonly bool Loop;
+        public readonly float Duration;
 
         private TimerTrig _timer;
         private int _currentFrameIndex;
