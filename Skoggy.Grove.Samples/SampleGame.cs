@@ -29,12 +29,16 @@ namespace Skoggy.Grove.Samples
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             _sample = new StateMachineSample(this);
+
+            _sample.Load();
         }
 
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+
+            _sample.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -43,6 +47,8 @@ namespace Skoggy.Grove.Samples
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
+            _sample.Draw(gameTime);
+            
             base.Draw(gameTime);
         }
     }
