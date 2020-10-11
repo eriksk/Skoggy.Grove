@@ -6,20 +6,29 @@ namespace Skoggy.Grove.StateMachines
 {
     public class StateMachine<T> where T : IState
     {
-        private Dictionary<Type, IState> _states;
-        private IState _active;
+        private Dictionary<Type, T> _states;
+        private T _active;
 
-        public StateMachine(params IState[] states)
+        public StateMachine(params T[] states)
         {
-            if (states is null) throw new ArgumentNullException(nameof(states));
-            if (states.Length == 0) throw new ArgumentException($"{nameof(states)} statemachine must have at least one state");
-
-            _states = states.ToDictionary(x => x.GetType());
+            _states = states?.ToDictionary(x => x.GetType()) ?? new Dictionary<Type, T>();
         }
+
+        public void Add(T state)
+        {
+            _states.Add(state.GetType(), state);
+        }
+
+        public T Active => _active;
 
         public void Start<TState>() where TState : T
         {
             Set<TState>();
+        }
+
+        public TState Get<TState>() where TState : T 
+        {
+            return (TState)_states[typeof(TState)];
         }
 
         public void Set<TState>() where TState : T
