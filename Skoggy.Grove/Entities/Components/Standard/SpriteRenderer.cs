@@ -1,10 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Skoggy.Grove.Entities.Actions;
+using Skoggy.Grove.Entities.Components.Base;
 
 namespace Skoggy.Grove.Entities.Components.Standard
 {
-    public class SpriteRenderer : Component, IUpdate, IRender
+    public class SpriteRenderer : Renderer, IUpdate
     {
         public Texture2D Texture;
         public Rectangle Source;
@@ -16,10 +17,10 @@ namespace Skoggy.Grove.Entities.Components.Standard
         {
         }
 
-        public void Render(SpriteBatch spriteBatch, GraphicsDevice graphics)
+        public override void Render(SpriteBatch spriteBatch, GraphicsDevice graphics)
         {
             var origin = new Vector2(Source.Width, Source.Height) * Pivot;
-            
+
             spriteBatch.Draw(
                 Texture,
                 Entity.WorldPosition,

@@ -1,8 +1,9 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using Skoggy.Grove.Contexts;
 using Skoggy.Grove.Entities.Components;
-using Skoggy.Grove.Entities.Rendering;
-using Skoggy.Grove.Entities.Updating;
+using Skoggy.Grove.Entities.Layers;
+using Skoggy.Grove.Entities.LifetimeHooks.Hooks;
+using System.Collections.Generic;
 
 namespace Skoggy.Grove.Entities
 {
@@ -11,18 +12,18 @@ namespace Skoggy.Grove.Entities
         private DesynchronizedList<Entity> _entities;
 
         private int _entityIdCount;
-        private IEntityUpdater _updater;
-        private IEntityRenderer _renderer;
+        private ILifetimeHooks _lifetimeHooks;
 
         internal readonly ComponentActionCache ComponentActionCache;
         internal DesynchronizedList<Entity> Entities => _entities;
+        internal readonly LayerConfiguration LayerConfiguration;
 
         public EntityWorld(
-            IEntityUpdater updater = null,
-            IEntityRenderer renderer = null)
+            LayerConfiguration layerConfiguration = null,
+            ILifetimeHooks lifetimeHooks = null)
         {
-            _updater = updater ?? new DefaultEntityUpdater();
-            _renderer = renderer ?? new DefaultEntityRenderer();
+            LayerConfiguration = layerConfiguration ?? new LayerConfiguration();
+            _lifetimeHooks = lifetimeHooks ?? new DefaultLifetimeHooks();
             _entities = new DesynchronizedList<Entity>();
             ComponentActionCache = new ComponentActionCache();
         }
@@ -43,7 +44,8 @@ namespace Skoggy.Grove.Entities
             {
                 entity.Components.Sync();
             }
-            _updater?.Update(this);
+            _lifetimeHooks.Initialize(this);
+            _lifetimeHooks.Update(this);
         }
 
         public void Render(SpriteBatch spriteBatch, GraphicsDevice graphics)
@@ -53,7 +55,65 @@ namespace Skoggy.Grove.Entities
             {
                 entity.Components.Sync();
             }
-            _renderer?.Render(this, spriteBatch, graphics);
+            _lifetimeHooks.Render(this, spriteBatch, graphics);
+        }
+
+        public Entity FindById(int id)
+        {
+            foreach (var entity in _entities)
+            {
+                if (entity.Id == id) return entity;
+            }
+            return null;
+        }
+
+        public Entity Find(string name)
+        {
+            foreach (var entity in _entities)
+            {
+                if (entity.Name == name) return entity;
+            }
+            return null;
+        }
+
+        public IEnumerable<Entity> FindAll(string name)
+        {
+            foreach (var entity in _entities)
+            {
+                if (entity.Name == name) yield return entity;
+            }
+        }
+
+        public T FindComponent<T>() where T : Component
+        {
+            // TODO: FASTER HARDER NO GARBEJE COLLECTSION
+            foreach (var entity in _entities)
+            {
+                foreach (var component in entity.Components)
+                {
+                    if (component is T typedComponent)
+                    {
+                        return typedComponent;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        public IEnumerable<T> FindAllComponents<T>() where T : Component
+        {
+            // TODO: FASTER HARDER NO GARBEJE COLLECTSION
+            foreach(var entity in _entities)
+            {
+                foreach(var component in entity.Components)
+                {
+                    if(component is T typedComponent)
+                    {
+                        yield return typedComponent;
+                    }
+                }
+            }
         }
     }
 }

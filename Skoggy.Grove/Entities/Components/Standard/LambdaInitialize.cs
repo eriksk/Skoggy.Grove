@@ -3,11 +3,11 @@ using System;
 
 namespace Skoggy.Grove.Entities.Components.Standard
 {
-    public class LambdaUpdate : Component, IUpdate
+    public class LambdaInitialize : Component, IInitialize
     {
-        public Action<LambdaUpdate> Callback;
+        public Action<LambdaInitialize> Callback;
 
-        public void Update()
+        public void Initialize()
         {
             Callback?.Invoke(this);
         }

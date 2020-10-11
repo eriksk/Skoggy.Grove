@@ -10,9 +10,9 @@ namespace Skoggy.Grove.Entities
     {
         public readonly int Id;
         public string Name;
+        public readonly EntityWorld World;
 
         internal bool Deleted;
-        internal readonly EntityWorld World;
         internal readonly DesynchronizedList<Component> Components;
 
         internal Entity(string name, EntityWorld world)
