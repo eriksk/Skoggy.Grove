@@ -12,7 +12,7 @@ namespace Skoggy.Grove.Animations
         private TimerTrig _timer;
         private int _currentFrameIndex;
 
-        public Animation(float duration, int[] frames, bool loop)
+        public Animation(float duration, int[] frames, bool loop = true)
         {
             Frames = frames ?? throw new ArgumentNullException(nameof(frames));
             if (frames.Length == 0) throw new ArgumentException($"{nameof(frames)} must have at least one frame.");

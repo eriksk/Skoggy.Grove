@@ -15,7 +15,8 @@ namespace Skoggy.Grove.Entities.Layers
             _defaultConfiguration = defaultConfiguration ?? new LayerConfigurationInfo(
                 SpriteSortMode.Deferred,
                 BlendState.NonPremultiplied,
-                SamplerState.LinearClamp);
+                SamplerState.LinearClamp,
+                RasterizerState.CullCounterClockwise);
         }
 
         internal LayerConfigurationInfo Get(int layer)

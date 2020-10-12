@@ -19,7 +19,14 @@ namespace Skoggy.Grove.Entities.Components.Standard
 
         public override void Render(SpriteBatch spriteBatch, GraphicsDevice graphics)
         {
+            if (Texture == null) return;
+
             var origin = new Vector2(Source.Width, Source.Height) * Pivot;
+
+            if(Entity.WorldScale.X < 0f)
+            {
+
+            }
 
             spriteBatch.Draw(
                 Texture,

@@ -4,16 +4,16 @@ namespace Skoggy.Grove.Entities.Factories
 {
     public abstract class EntityFactory : IEntityFactory
     {
-        private readonly EntityWorld _world;
+        protected readonly EntityWorld World;
 
         protected EntityFactory(EntityWorld world)
         {
-            _world = world;
+            World = world;
         }
 
         public Entity Create(string name, Vector2 position, float rotation, Vector2 scale)
         {
-            var entity = _world.AddEntity(name);
+            var entity = World.AddEntity(name);
             entity.LocalPosition = position;
             entity.LocalRotation = rotation;
             entity.LocalScale = scale;

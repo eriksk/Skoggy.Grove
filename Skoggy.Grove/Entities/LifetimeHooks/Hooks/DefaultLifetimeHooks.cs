@@ -14,6 +14,7 @@ namespace Skoggy.Grove.Entities.LifetimeHooks.Hooks
             {
                 foreach (var component in entity.Components)
                 {
+                    if (!component.Enabled) continue;
                     if (component.Initialized) continue;
                     if (component is IInitialize initialize)
                     {
@@ -33,6 +34,7 @@ namespace Skoggy.Grove.Entities.LifetimeHooks.Hooks
             {
                 foreach (var component in entity.Components)
                 {
+                    if (!component.Enabled) continue;
                     // TODO: ugh, make it good instead
                     if (component is IUpdate updateAction)
                     {
@@ -48,7 +50,7 @@ namespace Skoggy.Grove.Entities.LifetimeHooks.Hooks
             var entities = entityWorld.Entities;
 
             // TODO: NO; BAD GC!!
-            var renderables = entities.SelectMany(x => x.Components.Where(f => f is IRender))
+            var renderables = entities.SelectMany(x => x.Components.Where(f => f.Enabled && f is IRender))
                 .Cast<IRender>()
                 .GroupBy(x => x.Layer)
                 .OrderBy(x => x.Key);
@@ -56,12 +58,20 @@ namespace Skoggy.Grove.Entities.LifetimeHooks.Hooks
             foreach (var group in renderables)
             {
                 var layerConfig = entityWorld.LayerConfiguration.Get(group.Key);
-                spriteBatch.Begin(layerConfig.SpriteSortMode, layerConfig.BlendState, layerConfig.SamplerState);
+
+                spriteBatch.Begin(
+                    layerConfig.SpriteSortMode,
+                    layerConfig.BlendState,
+                    layerConfig.SamplerState,
+                    null,
+                    layerConfig.RasterizerState);
+
                 // TODO: NO; BAD GC!!
                 foreach (var component in group.OrderBy(x => x.Order))
                 {
                     component.Render(spriteBatch, graphics);
                 }
+
                 spriteBatch.End();
             }
         }
