@@ -4,7 +4,7 @@ Classlib for MonoGame
 
 ## Working on
 
-* nothin'
+* nothin' and everything
 
 ## Features Implemented
 
@@ -13,6 +13,12 @@ Classlib for MonoGame
 * Poolable collection
 * Generic FSM
 * Sprite Sheets
+* Tiled support (TMX maps)
+* Scene Management
+* Scene Graph (via entity system)
+* Entity Components
+* Multi-layer rendering support (for sprites)
+* Nuget package
 
 ## Backlog
 
@@ -27,16 +33,11 @@ Classlib for MonoGame
 * Input Management
 * Math lib
 * Module System
-* Multi-layer rendering support (for sprites)
 * Networking (maybe)
-* Nuget package
 * Particle System
 * PostFx Pipeline
 * Random for float
-* Scene Graph
-* Scene Management
 * Shape Renderer
 * SpriteBatch Extensions
-* Tiled support
 * Tweens
 * UI lib
