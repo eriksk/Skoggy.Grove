@@ -27,8 +27,9 @@ namespace Skoggy.Grove.Entities.Components.Standard
         {
             if(Map == null) return;
 
-            var offset = Entity.WorldPosition;
+            var mapOffset = Entity.WorldPosition;
             var texture = _spriteSheet.SpriteSheet.Texture;
+            var cellSize = _spriteSheet.SpriteSheet.CellWidth;
 
             // TODO: Culling
 
@@ -36,6 +37,8 @@ namespace Skoggy.Grove.Entities.Components.Standard
             {
                 foreach(var chunk in layer.Chunks)
                 {
+                    var chunkOffset = mapOffset + new Vector2(chunk.X * cellSize, chunk.Y * cellSize);
+
                     for(var x = 0; x < chunk.Width; x++)
                     {
                         for(var y = 0; y < chunk.Height; y++)
@@ -51,7 +54,7 @@ namespace Skoggy.Grove.Entities.Components.Standard
                                             
                             spriteBatch.Draw(
                                 texture,
-                                offset + cellPosition,
+                                chunkOffset + cellPosition,
                                 source,
                                 Color.Lerp(Color.Black, Color.White, layer.Opacity),
                                 0f,
