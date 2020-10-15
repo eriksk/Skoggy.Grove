@@ -3,7 +3,9 @@ using Skoggy.Grove.Contexts;
 using Skoggy.Grove.Entities.Components;
 using Skoggy.Grove.Entities.Layers;
 using Skoggy.Grove.Entities.LifetimeHooks.Hooks;
+using Skoggy.Grove.Entities.Modules;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Skoggy.Grove.Entities
 {
@@ -17,6 +19,7 @@ namespace Skoggy.Grove.Entities
         internal readonly ComponentActionCache ComponentActionCache;
         internal DesynchronizedList<Entity> Entities => _entities;
         internal readonly LayerConfiguration LayerConfiguration;
+        internal List<IEntityModule> _modules;
 
         public EntityWorld(
             LayerConfiguration layerConfiguration = null,
@@ -26,9 +29,21 @@ namespace Skoggy.Grove.Entities
             _lifetimeHooks = lifetimeHooks ?? new DefaultLifetimeHooks();
             _entities = new DesynchronizedList<Entity>();
             ComponentActionCache = new ComponentActionCache();
+            _modules = new List<IEntityModule>();
         }
 
         internal int NextEntityId() => _entityIdCount++;
+
+        public void RegisterModule<TModule>(TModule module) where TModule : IEntityModule
+        {
+            _modules.Add(module);
+        }
+
+        public TModule GetModule<TModule>() where TModule : IEntityModule
+        {
+            // TODO: Create lookup
+            return (TModule)_modules.FirstOrDefault(x => x.GetType() == typeof(TModule));
+        }
 
         public Entity AddEntity(string name)
         {
@@ -46,6 +61,11 @@ namespace Skoggy.Grove.Entities
             }
             _lifetimeHooks.Initialize(this);
             _lifetimeHooks.Update(this);
+            
+            foreach(var module in _modules)
+            {
+                module.Update();
+            }
         }
 
         public void Render(SpriteBatch spriteBatch, GraphicsDevice graphics)
@@ -56,6 +76,11 @@ namespace Skoggy.Grove.Entities
                 entity.Components.Sync();
             }
             _lifetimeHooks.Render(this, spriteBatch, graphics);
+            
+            foreach(var module in _modules)
+            {
+                module.Render();
+            }
         }
 
         public Entity FindById(int id)
