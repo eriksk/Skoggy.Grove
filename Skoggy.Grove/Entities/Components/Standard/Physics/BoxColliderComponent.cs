@@ -28,6 +28,7 @@ namespace Skoggy.Grove.Entities.Components.Standard.Physics
                 ConvertUnits.ToSimUnits(Offset), 
                 angle: 0f);
 
+            // TODO: this doesn't show up in the debugger
             Fixture = body.CreateFixture(new PolygonShape(vertices, Density));
         }
     }

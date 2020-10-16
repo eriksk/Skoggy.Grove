@@ -11,12 +11,12 @@ namespace Skoggy.Grove.Entities.Factories
             World = world;
         }
 
-        public Entity Create(string name, Vector2 position, float rotation, Vector2 scale)
+        public Entity Create(string name, Vector2 position = new Vector2(), float rotation = 0f, Vector2? scale = null)
         {
             var entity = World.AddEntity(name);
             entity.LocalPosition = position;
             entity.LocalRotation = rotation;
-            entity.LocalScale = scale;
+            entity.LocalScale = scale ?? Vector2.One;
             AddComponents(entity);
             return entity;
         }

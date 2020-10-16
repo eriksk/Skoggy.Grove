@@ -1,9 +1,10 @@
+using Microsoft.Xna.Framework;
 
 namespace Skoggy.Grove.Entities.Modules
 {
     public interface IEntityModule
     {
         void Update();
-        void Render();
+        void Render(Matrix cameraView);
     }
 }

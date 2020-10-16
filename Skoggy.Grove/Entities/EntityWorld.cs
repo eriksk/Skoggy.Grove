@@ -1,9 +1,11 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Skoggy.Grove.Contexts;
 using Skoggy.Grove.Entities.Components;
 using Skoggy.Grove.Entities.Layers;
 using Skoggy.Grove.Entities.LifetimeHooks.Hooks;
 using Skoggy.Grove.Entities.Modules;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -34,9 +36,11 @@ namespace Skoggy.Grove.Entities
 
         internal int NextEntityId() => _entityIdCount++;
 
-        public void RegisterModule<TModule>(TModule module) where TModule : IEntityModule
+        public TModule RegisterModule<TModule>(TModule module, Action<TModule> callback = null) where TModule : IEntityModule
         {
             _modules.Add(module);
+            callback?.Invoke(module);
+            return module;
         }
 
         public TModule GetModule<TModule>() where TModule : IEntityModule
@@ -68,18 +72,18 @@ namespace Skoggy.Grove.Entities
             }
         }
 
-        public void Render(SpriteBatch spriteBatch, GraphicsDevice graphics)
+        public void Render(SpriteBatch spriteBatch, GraphicsDevice graphics, Matrix cameraView)
         {
             _entities.Sync();
             foreach (var entity in _entities)
             {
                 entity.Components.Sync();
             }
-            _lifetimeHooks.Render(this, spriteBatch, graphics);
+            _lifetimeHooks.Render(this, spriteBatch, graphics, cameraView);
             
             foreach(var module in _modules)
             {
-                module.Render();
+                module.Render(cameraView);
             }
         }
 

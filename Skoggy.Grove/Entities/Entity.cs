@@ -115,5 +115,6 @@ namespace Skoggy.Grove.Entities
             Matrix.CreateScale(WorldScale.X, WorldScale.Y, 1f) *
             Matrix.CreateRotationZ(WorldRotation) *
             Matrix.CreateTranslation(WorldPosition.X, WorldPosition.Y, 0f);
+
     }
 }

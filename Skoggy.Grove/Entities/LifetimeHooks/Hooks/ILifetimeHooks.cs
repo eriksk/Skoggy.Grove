@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Skoggy.Grove.Entities.LifetimeHooks.Hooks
 {
@@ -6,6 +7,6 @@ namespace Skoggy.Grove.Entities.LifetimeHooks.Hooks
     {
         void Initialize(EntityWorld entityWorld);
         void Update(EntityWorld entityWorld);
-        void Render(EntityWorld entityWorld, SpriteBatch spriteBatch, GraphicsDevice graphics);
+        void Render(EntityWorld entityWorld, SpriteBatch spriteBatch, GraphicsDevice graphics, Matrix cameraView);
     }
 }

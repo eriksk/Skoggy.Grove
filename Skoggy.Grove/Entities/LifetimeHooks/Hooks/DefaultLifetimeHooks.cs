@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Skoggy.Grove.Entities.Actions;
 using System.Linq;
 
@@ -44,7 +45,7 @@ namespace Skoggy.Grove.Entities.LifetimeHooks.Hooks
             }
         }
 
-        public void Render(EntityWorld entityWorld, SpriteBatch spriteBatch, GraphicsDevice graphics)
+        public void Render(EntityWorld entityWorld, SpriteBatch spriteBatch, GraphicsDevice graphics, Matrix cameraView)
         {
             // TODO: Maybe we can do a prepare step and group all components into a list of the action interfaces that we want to use
             var entities = entityWorld.Entities;
@@ -64,7 +65,9 @@ namespace Skoggy.Grove.Entities.LifetimeHooks.Hooks
                     layerConfig.BlendState,
                     layerConfig.SamplerState,
                     null,
-                    layerConfig.RasterizerState);
+                    layerConfig.RasterizerState,
+                    null,
+                    cameraView);
 
                 // TODO: NO; BAD GC!!
                 foreach (var component in group.OrderBy(x => x.Order))

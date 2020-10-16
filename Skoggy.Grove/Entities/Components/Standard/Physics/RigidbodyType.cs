@@ -6,4 +6,9 @@ namespace Skoggy.Grove.Entities.Components.Standard.Physics
         Dynamic,
         Kinematic
     }
+    public enum ForceMode
+    {
+        Force,
+        Impulse
+    }
 }
