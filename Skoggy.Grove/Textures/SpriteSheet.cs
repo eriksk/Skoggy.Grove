@@ -56,5 +56,21 @@ namespace Skoggy.Grove.Textures
         public int SpriteCount => _sources.Length;
         public Rectangle this[int index] => _sources[index];
         public Rectangle this[int column, int row] => _sources[column + row * Columns];
+
+        public Rectangle GetCustom(int index, int columnCount, int rowCount)
+        {
+            var rect = this[index];
+            rect.Width = columnCount * CellWidth;
+            rect.Height = rowCount * CellHeight;
+            return rect;
+        }
+        
+        public Rectangle GetCustom(int column, int row, int columnCount, int rowCount)
+        {
+            var rect = this[column, row];
+            rect.Width = columnCount * CellWidth;
+            rect.Height = rowCount * CellHeight;
+            return rect;
+        }
     }
 }
