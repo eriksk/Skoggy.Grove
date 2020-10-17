@@ -8,9 +8,10 @@ using Skoggy.Grove.Entities.Modules;
 
 namespace Skoggy.Grove.Entities.Components.Standard.Physics
 {
-    public class RigidbodyComponent : Component, IInitialize, IUpdate
+    public class Rigidbody : Component, IInitialize, IUpdate
     {
-        public Body Body;
+        internal Body Body;
+
         public RigidbodyType Type = RigidbodyType.Dynamic;
         public bool FixedRotation;
 
@@ -24,11 +25,12 @@ namespace Skoggy.Grove.Entities.Components.Standard.Physics
             Body = BodyFactory.CreateBody(
                 physicsModule.World,
                 ConvertUnits.ToSimUnits(Entity.WorldPosition),
-                ConvertUnits.ToSimUnits(Entity.WorldRotation),
+                Entity.WorldRotation,
                 bodyType,
                 Entity.Id);
 
             Body.FixedRotation = FixedRotation;
+
             _initialized = true;
         }
 
@@ -44,26 +46,28 @@ namespace Skoggy.Grove.Entities.Components.Standard.Physics
         {
             if (!_initialized) Initialize();
 
-            Body.Rotation = ConvertUnits.ToSimUnits(rotation);
+            Body.Rotation = rotation;
             Entity.WorldRotation = rotation;
         }
 
         public void AddForce(Vector2 force, ForceMode forceMode = ForceMode.Force)
         {
+            if (!_initialized) Initialize();
+
             if (forceMode == ForceMode.Force)
             {
-                Body.ApplyForce(ConvertUnits.ToSimUnits(force));
+                Body.ApplyForce(force * Body.Mass);
             }
             else if (forceMode == ForceMode.Impulse)
             {
-                Body.ApplyLinearImpulse(ConvertUnits.ToSimUnits(force));
+                Body.ApplyLinearImpulse(force * Body.Mass);
             }
         }
 
         public void Update()
         {
             Entity.WorldPosition = ConvertUnits.ToDisplayUnits(Body.Position);
-            Entity.WorldRotation = ConvertUnits.ToDisplayUnits(Body.Rotation);
+            Entity.WorldRotation = Body.Rotation;
         }
 
         private BodyType MapType(RigidbodyType type)

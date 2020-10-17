@@ -8,17 +8,20 @@ namespace Skoggy.Grove.Entities.Layers
         public readonly BlendState BlendState;
         public readonly SamplerState SamplerState;
         public readonly RasterizerState RasterizerState;
+        public readonly bool ScreenSpace;
 
         public LayerConfigurationInfo(
             SpriteSortMode spriteSortMode,
             BlendState blendState,
             SamplerState samplerState,
-            RasterizerState rasterizerState)
+            RasterizerState rasterizerState,
+            bool screenSpace = false)
         {
             SpriteSortMode = spriteSortMode;
             BlendState = blendState;
             SamplerState = samplerState;
             RasterizerState = rasterizerState;
+            ScreenSpace = screenSpace;
         }
     }
 }

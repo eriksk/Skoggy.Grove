@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Skoggy.Grove.Cameras;
 using Skoggy.Grove.Contexts;
 using Skoggy.Grove.Entities.Components;
 using Skoggy.Grove.Entities.Layers;
@@ -17,11 +18,13 @@ namespace Skoggy.Grove.Entities
 
         private int _entityIdCount;
         private ILifetimeHooks _lifetimeHooks;
+        private Camera2D _camera;
 
         internal readonly ComponentActionCache ComponentActionCache;
         internal DesynchronizedList<Entity> Entities => _entities;
         internal readonly LayerConfiguration LayerConfiguration;
         internal List<IEntityModule> _modules;
+        public Camera2D Camera => _camera;
 
         public EntityWorld(
             LayerConfiguration layerConfiguration = null,
@@ -32,6 +35,7 @@ namespace Skoggy.Grove.Entities
             _entities = new DesynchronizedList<Entity>();
             ComponentActionCache = new ComponentActionCache();
             _modules = new List<IEntityModule>();
+            _camera = new Camera2D();
         }
 
         internal int NextEntityId() => _entityIdCount++;
@@ -39,8 +43,14 @@ namespace Skoggy.Grove.Entities
         public TModule RegisterModule<TModule>(TModule module, Action<TModule> callback = null) where TModule : IEntityModule
         {
             _modules.Add(module);
+            module.EntityWorld = this;
             callback?.Invoke(module);
             return module;
+        }
+
+        public Vector2 ScreenPointToWorldPoint(Vector2 screenPoint)
+        {
+            return Vector2.Transform(GameContext.ScreenPointToRenderPoint(screenPoint), Matrix.Invert(Camera.View));
         }
 
         public TModule GetModule<TModule>() where TModule : IEntityModule
@@ -72,18 +82,18 @@ namespace Skoggy.Grove.Entities
             }
         }
 
-        public void Render(SpriteBatch spriteBatch, GraphicsDevice graphics, Matrix cameraView)
+        public void Render(SpriteBatch spriteBatch, GraphicsDevice graphics)
         {
             _entities.Sync();
             foreach (var entity in _entities)
             {
                 entity.Components.Sync();
             }
-            _lifetimeHooks.Render(this, spriteBatch, graphics, cameraView);
+            _lifetimeHooks.Render(this, spriteBatch, graphics, _camera.View);
             
             foreach(var module in _modules)
             {
-                module.Render(cameraView);
+                module.Render(_camera.View);
             }
         }
 

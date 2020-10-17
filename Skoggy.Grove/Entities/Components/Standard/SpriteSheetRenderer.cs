@@ -1,28 +1,34 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Skoggy.Grove.Entities.Actions;
 using Skoggy.Grove.Entities.Components.Base;
 
 namespace Skoggy.Grove.Entities.Components.Standard
 {
-    public class SpriteRenderer : Renderer
+    public class SpriteSheetRenderer : Renderer, IInitialize
     {
-        public Texture2D Texture;
-        public Rectangle Source;
+        public int SourceIndex;
         public Vector2 Pivot = Vector2.One * 0.5f;
         public SpriteEffects SpriteEffects = SpriteEffects.None;
         public Color Color = Color.White;
+        private SpriteSheetComponent _spriteSheet;
+
+        public void Initialize()
+        {
+            _spriteSheet = GetComponent<SpriteSheetComponent>();
+        }
 
         public override void Render(SpriteBatch spriteBatch, GraphicsDevice graphics)
         {
-            if (Texture == null) return;
+            if (_spriteSheet == null) return;
 
-            var origin = new Vector2(Source.Width, Source.Height) * Pivot;
+            var sprite = _spriteSheet.SpriteSheet[SourceIndex];
+            var origin = new Vector2(sprite.Width, sprite.Height) * Pivot;
 
             spriteBatch.Draw(
-                Texture,
+                _spriteSheet.SpriteSheet.Texture,
                 Entity.WorldPosition,
-                Source,
+                sprite,
                 Color,
                 Entity.WorldRotation,
                 origin,

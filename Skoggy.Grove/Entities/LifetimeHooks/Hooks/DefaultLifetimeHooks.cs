@@ -67,7 +67,7 @@ namespace Skoggy.Grove.Entities.LifetimeHooks.Hooks
                     null,
                     layerConfig.RasterizerState,
                     null,
-                    cameraView);
+                    layerConfig.ScreenSpace ? Matrix.Identity : cameraView);
 
                 // TODO: NO; BAD GC!!
                 foreach (var component in group.OrderBy(x => x.Order))

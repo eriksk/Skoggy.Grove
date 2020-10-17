@@ -22,6 +22,9 @@ namespace Skoggy.Grove.Entities.Modules
             set { _world.Gravity = value; }
         }
 
+        private EntityWorld _entityWorld;
+        EntityWorld IEntityModule.EntityWorld { get => _entityWorld; set => _entityWorld = value; }
+
         public PhysicsEntityModule()
         {
             _world = new World(Vector2.Zero);
@@ -49,19 +52,8 @@ namespace Skoggy.Grove.Entities.Modules
         public void Render(Matrix cameraView)
         {
             if (_physicsDebugger != null)
-            {
-                // TODO: Use Camera
-                var rotation = Matrix.CreateRotationZ(0f);
-                var zoom = Matrix.CreateScale(1f);
-                var center = Vector3.Zero;// ConvertUnits.ToSimUnits(new Vector3(GameContext.RenderResolution.X, GameContext.RenderResolution.Y, 0f) * 0.5f);
-                var position = new Vector3(0, 0, 0f);
-
-                var view = Matrix.CreateTranslation(position) *
-                        rotation *
-                        zoom *
-                        Matrix.CreateTranslation(center);
-
-                _physicsDebugger.RenderDebugData(_projection, view);
+            {   
+                _physicsDebugger.RenderDebugData(_projection, _entityWorld.Camera.PhysicsView);
             }
         }
     }

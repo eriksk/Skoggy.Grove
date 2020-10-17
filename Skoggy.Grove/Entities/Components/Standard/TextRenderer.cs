@@ -1,28 +1,29 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Skoggy.Grove.Entities.Actions;
 using Skoggy.Grove.Entities.Components.Base;
 
 namespace Skoggy.Grove.Entities.Components.Standard
 {
-    public class SpriteRenderer : Renderer
+    public class TextRenderer : Renderer
     {
-        public Texture2D Texture;
-        public Rectangle Source;
+        public SpriteFont Font;
+        public string Text;
         public Vector2 Pivot = Vector2.One * 0.5f;
         public SpriteEffects SpriteEffects = SpriteEffects.None;
         public Color Color = Color.White;
 
         public override void Render(SpriteBatch spriteBatch, GraphicsDevice graphics)
         {
-            if (Texture == null) return;
+            if (Font == null) return;
+            if(Text == null) return;
+            if(Text == string.Empty) return;
 
-            var origin = new Vector2(Source.Width, Source.Height) * Pivot;
+            var origin = Font.MeasureString(Text) * Pivot;
 
-            spriteBatch.Draw(
-                Texture,
+            spriteBatch.DrawString(
+                Font,
+                Text,
                 Entity.WorldPosition,
-                Source,
                 Color,
                 Entity.WorldRotation,
                 origin,
@@ -30,5 +31,6 @@ namespace Skoggy.Grove.Entities.Components.Standard
                 SpriteEffects,
                 0f);
         }
+
     }
 }
