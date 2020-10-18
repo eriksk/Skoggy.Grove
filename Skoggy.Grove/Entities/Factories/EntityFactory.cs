@@ -18,6 +18,7 @@ namespace Skoggy.Grove.Entities.Factories
             entity.LocalRotation = rotation;
             entity.LocalScale = scale ?? Vector2.One;
             AddComponents(entity);
+            entity.Components.Sync();
             return entity;
         }
 

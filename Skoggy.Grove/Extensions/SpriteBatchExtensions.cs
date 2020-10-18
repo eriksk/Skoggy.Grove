@@ -6,6 +6,23 @@ namespace Skoggy.Grove.Extensions
 {
     public static class SpriteBatchExtensions
     {
+        public static void DrawLine(this SpriteBatch sb, Vector2 start, Vector2 end, Color color)
+        {
+            var direction = (end - start);
+            direction.Normalize();
+            var distance = Vector2.Distance(start, end);
+
+            sb.Draw(
+                GameContext.Pixel,
+                start,
+                null,
+                color,
+                direction.ToAngle(),
+                new Vector2(0f, 0.5f),
+                new Vector2(distance, 1f),
+                SpriteEffects.None, 0f);
+        }
+
         public static void DrawShadowed(this SpriteBatch sb,
             Texture2D texture,
             Vector2 position,
