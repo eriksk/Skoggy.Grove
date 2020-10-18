@@ -6,6 +6,16 @@ namespace Skoggy.Grove.Physics
 {
     public static class CollisionDetector
     {
+        public static bool Intersect(ref AABB a, ref AABB b)
+        {
+            if (a.MaxX < b.MinX) return false;
+            if (b.MaxX < a.MinX) return false;
+            if (a.MaxY < b.MinY) return false;
+            if (b.MaxY < a.MinY) return false;
+
+            return true;
+        }
+
         public static bool CircleVsCircle(
             Rigidbody bodyA,
             Rigidbody bodyB,
@@ -39,7 +49,7 @@ namespace Skoggy.Grove.Physics
             return true;
         }
 
-        public static bool AABBvsAABB(
+        public static bool BoxVsBox(
             Rigidbody bodyA,
             Rigidbody bodyB,
             Box boxA,
@@ -80,7 +90,7 @@ namespace Skoggy.Grove.Physics
             }
 
             // Find out which axis is axis of least penetration
-            if (xOverlap > yOverlap)
+            if (xOverlap < yOverlap)
             {
                 // Point towards B knowing that n points from A to B
                 var normal = new Vector2(directionVector.X < 0f ? -1f : 1f, 0f);

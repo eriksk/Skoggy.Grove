@@ -1,27 +1,14 @@
 namespace Skoggy.Grove.Physics.Shapes
 {
-    public class Shape
+    public abstract class Shape
     {
-        public float Restitution;
-    }
+        public PhysicsMaterial Material;
 
-    public class Circle : Shape
-    {
-        public float Radius;
-    }
+        private static int _idCounter;
+        internal int Id = _idCounter++;
 
-    public class Box : Shape
-    {
-        public float Width;
-        public float Height;
+        public int Layer = int.MaxValue;
 
-        public AABB CalculateAABB(Rigidbody body) =>
-            new AABB()
-            {
-                MinX = body.Position.X - Width / 2f,
-                MaxX = body.Position.X + Width / 2f,
-                MinY = body.Position.Y - Height / 2f,
-                MaxY = body.Position.Y + Height / 2f
-            };
+        public abstract AABB CalculateAABB(Rigidbody body);
     }
 }

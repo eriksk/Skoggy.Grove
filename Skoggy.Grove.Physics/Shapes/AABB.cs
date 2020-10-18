@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using Microsoft.Xna.Framework;
 
 namespace Skoggy.Grove.Physics.Shapes
 {
@@ -9,5 +10,7 @@ namespace Skoggy.Grove.Physics.Shapes
         public float MaxX;
         public float MinY;
         public float MaxY;
+
+        public Vector2 Center => new Vector2(MaxX - MinX, MaxY - MinY);
     }
 }

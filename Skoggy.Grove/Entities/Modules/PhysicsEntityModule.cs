@@ -22,8 +22,7 @@ namespace Skoggy.Grove.Entities.Modules
             set { _world.Gravity = value; }
         }
 
-        private EntityWorld _entityWorld;
-        EntityWorld IEntityModule.EntityWorld { get => _entityWorld; set => _entityWorld = value; }
+        public EntityWorld EntityWorld { get; set; }
 
         public PhysicsEntityModule()
         {
@@ -52,8 +51,8 @@ namespace Skoggy.Grove.Entities.Modules
         public void Render(Matrix cameraView)
         {
             if (_physicsDebugger != null)
-            {   
-                _physicsDebugger.RenderDebugData(_projection, _entityWorld.Camera.PhysicsView);
+            {
+                _physicsDebugger.RenderDebugData(_projection, EntityWorld.Camera.PhysicsView);
             }
         }
     }

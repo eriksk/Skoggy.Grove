@@ -4,7 +4,7 @@ namespace Skoggy.Grove.Entities.Modules
 {
     public interface IEntityModule
     {
-        EntityWorld EntityWorld { get; internal set; }
+        EntityWorld EntityWorld { get; set; }
         void Update();
         void Render(Matrix cameraView);
     }
