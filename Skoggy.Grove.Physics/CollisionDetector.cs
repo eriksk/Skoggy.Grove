@@ -42,32 +42,18 @@ namespace Skoggy.Grove.Physics
         public static bool AABBvsAABB(
             Rigidbody bodyA,
             Rigidbody bodyB,
-            AABB aabbA,
-            AABB aabbB,
+            Box boxA,
+            Box boxB,
             out Manifold manifold)
         {
             var directionVector = bodyB.Position - bodyA.Position;
 
-            var aboxMin = new Vector2(
-                bodyA.Position.X - aabbA.Width / 2f,
-                bodyA.Position.Y - aabbA.Height / 2f
-            );
-            var aboxMax = new Vector2(
-                bodyA.Position.X + aabbA.Width / 2f,
-                bodyA.Position.Y + aabbA.Height / 2f
-            );
-            var bboxMin = new Vector2(
-                bodyB.Position.X - aabbB.Width / 2f,
-                bodyB.Position.Y - aabbB.Height / 2f
-            );
-            var bboxMax = new Vector2(
-                bodyB.Position.X + aabbB.Width / 2f,
-                bodyB.Position.Y + aabbB.Height / 2f
-            );
+            var aabbA = boxA.CalculateAABB(bodyA);
+            var aabbB = boxB.CalculateAABB(bodyB);
 
             // Calculate half extents along x axis for each object
-            var aExtentX = (aboxMax.X - aboxMin.X) / 2f;
-            var bExtentX = (bboxMax.X - bboxMin.X) / 2f;
+            var aExtentX = (aabbA.MaxX - aabbA.MinX) / 2f;
+            var bExtentX = (aabbB.MaxX - aabbB.MinX) / 2f;
 
             // Calculate overlap on x axis
             var xOverlap = aExtentX + bExtentX - MathF.Abs(directionVector.X);
@@ -80,8 +66,8 @@ namespace Skoggy.Grove.Physics
             }
 
             // Calculate half extents along y axis for each object
-            var aExtentY = (aboxMax.Y - aboxMin.Y) / 2f;
-            var bExtentY = (bboxMax.Y - bboxMin.Y) / 2f;
+            var aExtentY = (aabbA.MaxY - aabbA.MinY) / 2f;
+            var bExtentY = (aabbB.MaxY - aabbB.MinY) / 2f;
 
             // Calculate overlap on y axis
             var yOverlap = aExtentY + bExtentY - MathF.Abs(directionVector.Y);
@@ -98,21 +84,21 @@ namespace Skoggy.Grove.Physics
             {
                 // Point towards B knowing that n points from A to B
                 var normal = new Vector2(directionVector.X < 0f ? -1f : 1f, 0f);
-                manifold = new Manifold(bodyA, bodyB, aabbA, aabbB, normal, xOverlap);
+                manifold = new Manifold(bodyA, bodyB, boxA, boxB, normal, xOverlap);
             }
             else
             {
                 // Point toward B knowing that n points from A to B
                 var normal = new Vector2(0f, directionVector.Y < 0f ? -1f : 1f);
-                manifold = new Manifold(bodyA, bodyB, aabbA, aabbB, normal, yOverlap);
+                manifold = new Manifold(bodyA, bodyB, boxA, boxB, normal, yOverlap);
             }
             return true;
         }
 
-        public static bool AABBvsCircle(
+        public static bool BoxvsCircle(
             Rigidbody bodyA,
             Rigidbody bodyB,
-            AABB aabbA,
+            Box boxA,
             Circle circleB,
             out Manifold manifold)
         {
@@ -122,18 +108,11 @@ namespace Skoggy.Grove.Physics
             // Closest point on A to center of B
             var closest = directionVector;
 
-            var aboxMin = new Vector2(
-                bodyA.Position.X - aabbA.Width / 2f,
-                bodyA.Position.Y - aabbA.Height / 2f
-            );
-            var aboxMax = new Vector2(
-                bodyA.Position.X + aabbA.Width / 2f,
-                bodyA.Position.Y + aabbA.Height / 2f
-            );
+            var aabbA = boxA.CalculateAABB(bodyA);
 
             // Calculate half extents along each axis
-            var xExtent = (aboxMax.X - aboxMin.X) / 2f;
-            var yExtent = (aboxMax.Y - aboxMin.Y) / 2f;
+            var xExtent = (aabbA.MaxX - aabbA.MinX) / 2f;
+            var yExtent = (aabbA.MaxY - aabbA.MinY) / 2f;
 
             // Clamp point to edges of the AABB
             closest.X = MathHelper.Clamp(closest.X, -xExtent, xExtent);
@@ -190,12 +169,12 @@ namespace Skoggy.Grove.Physics
             if (inside)
             {
                 // Collision normal needs to be flipped to point outside if circle was inside the AABB
-                manifold = new Manifold(bodyA, bodyB, aabbA, circleB, -directionVector, circleRadius - distance);
+                manifold = new Manifold(bodyA, bodyB, boxA, circleB, -directionVector, circleRadius - distance);
                 return true;
             }
             else
             {
-                manifold = new Manifold(bodyA, bodyB, aabbA, circleB, directionVector, circleRadius - distance);
+                manifold = new Manifold(bodyA, bodyB, boxA, circleB, directionVector, circleRadius - distance);
                 return true;
             }
         }
