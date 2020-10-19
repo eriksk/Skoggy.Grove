@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Skoggy.Grove.Physics.Shapes;
 
 namespace Skoggy.Grove.Physics
 {
@@ -12,6 +11,7 @@ namespace Skoggy.Grove.Physics
         private float _renderAlpha;
         private List<Rigidbody> _bodies;
         private BroadPhaseCollisionDetector _broadPhase;
+        private ShapeJumpTable _shapeJumpTable;
 
         public Vector2 Gravity;
 
@@ -19,6 +19,7 @@ namespace Skoggy.Grove.Physics
         {
             _bodies = new List<Rigidbody>();
             _broadPhase = new BroadPhaseCollisionDetector();
+            _shapeJumpTable = new ShapeJumpTable();
             Gravity = Vector2.Zero;
             _framePerSecond = framePerSecond;
         }
@@ -91,69 +92,11 @@ namespace Skoggy.Grove.Physics
         {
             foreach (var pair in _broadPhase.Pairs)
             {
-                // Box vs Box
-                {
-                    if ((pair.ShapeA is Box boxA) && (pair.ShapeB is Box boxB))
-                    {
-                        if (CollisionDetector.BoxVsBox(pair.BodyA, pair.BodyB, boxA, boxB, out var manifold))
-                        {
-                            if (manifold.Valid)
-                            {
-                                CollisionResolver.Resolve(ref manifold);
-                                CollisionResolver.PositionalCorrection(ref manifold);
-                            }
-                        }
-                        continue;
-                    }
-                }
-
-                // Box vs Circle
-                {
-                    if ((pair.ShapeA is Box boxA) && (pair.ShapeB is Circle circleB))
-                    {
-                        if (CollisionDetector.BoxvsCircle(pair.BodyA, pair.BodyB, boxA, circleB, out var manifold))
-                        {
-                            if (manifold.Valid)
-                            {
-                                CollisionResolver.Resolve(ref manifold);
-                                CollisionResolver.PositionalCorrection(ref manifold);
-                            }
-                        }
-                        continue;
-                    }
-                }
+                if (!_shapeJumpTable.DetectCollision(pair.BodyA, pair.BodyB, pair.ShapeA, pair.ShapeB, out var manifold)) continue;
+                if (!manifold.Valid) continue;
                 
-                // Circle vs Box
-                {
-                    if ((pair.ShapeA is Circle circleA) && (pair.ShapeB is Box boxB))
-                    {
-                        if (CollisionDetector.BoxvsCircle(pair.BodyB, pair.BodyA, boxB, circleA, out var manifold))
-                        {
-                            if (manifold.Valid)
-                            {
-                                CollisionResolver.Resolve(ref manifold);
-                                CollisionResolver.PositionalCorrection(ref manifold);
-                            }
-                        }
-                        continue;
-                    }
-                }
-                
-                // Circle vs Circle
-                {
-                    if ((pair.ShapeA is Circle circleA) && (pair.ShapeB is Circle circleB))
-                    {
-                        if (CollisionDetector.CircleVsCircle(pair.BodyA, pair.BodyB, circleA, circleB, out var manifold))
-                        {
-                            if (manifold.Valid)
-                            {
-                                CollisionResolver.Resolve(ref manifold);
-                                CollisionResolver.PositionalCorrection(ref manifold);
-                            }
-                        }
-                        continue;
-                    }
-                }
+                CollisionResolver.Resolve(ref manifold);
+                CollisionResolver.PositionalCorrection(ref manifold);
             }
         }
     }
