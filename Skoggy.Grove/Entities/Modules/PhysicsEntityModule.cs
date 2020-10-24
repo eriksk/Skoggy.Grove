@@ -1,5 +1,6 @@
 using System;
 using FarseerPhysics;
+using FarseerPhysics.DebugView;
 using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -12,7 +13,7 @@ namespace Skoggy.Grove.Entities.Modules
     public class PhysicsEntityModule : IEntityModule
     {
         private World _world;
-        private PhysicsDebugView _physicsDebugger;
+        private MonoGameDebugView _physicsDebugger;
         private Matrix _projection;
 
         public World World => _world;
@@ -31,7 +32,7 @@ namespace Skoggy.Grove.Entities.Modules
 
         public void EnableDebugging(SpriteFont spriteFont)
         {
-            _physicsDebugger = new PhysicsDebugView(_world);
+            _physicsDebugger = new MonoGameDebugView(_world);
             _physicsDebugger.LoadContent(GameContext.Graphics, spriteFont);
             _physicsDebugger.Enabled = true;
         }
