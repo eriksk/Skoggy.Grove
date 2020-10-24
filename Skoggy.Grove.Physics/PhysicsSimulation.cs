@@ -14,6 +14,7 @@ namespace Skoggy.Grove.Physics
         private ShapeJumpTable _shapeJumpTable;
 
         public Vector2 Gravity;
+        public int BodyCount => _bodies.Count;
 
         public PhysicsSimulation(int framePerSecond = 30)
         {

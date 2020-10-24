@@ -6,10 +6,18 @@ namespace Skoggy.Grove.Physics
 {
     public static class CollisionResolver
     {
+        const float FloatZeroDelta = 0.000001f;
+
         public static void PositionalCorrection(ref Manifold manifold)
         {
-            const float percent = 0.7f; // usually 20% to 80%, correction to avoid sinking
-            const float slop = 0.01f; // usually 0.01 to 0.1, used to avoid jitter when always correcting resting bodies
+            if (manifold.BodyA.Mass < FloatZeroDelta && manifold.BodyB.Mass < FloatZeroDelta)
+            {
+                // Both are static
+                return;
+            }
+
+            const float percent = 0.6f; // usually 20% to 80%, correction to avoid sinking
+            const float slop = 0.05f; // usually 0.01 to 0.1, used to avoid jitter when always correcting resting bodies
 
             var correction = (MathF.Max(manifold.Penetration - slop, 0.0f) / (manifold.BodyA.InverseMass + manifold.BodyB.InverseMass)) *
                 percent *
@@ -21,8 +29,18 @@ namespace Skoggy.Grove.Physics
 
         public static void Resolve(ref Manifold manifold)
         {
+            if (manifold.BodyA.Mass < FloatZeroDelta && manifold.BodyB.Mass < FloatZeroDelta)
+            {
+                // Both are static
+                return;
+            }
+
             // Calculate relative velocity
             var relativeVelocity = manifold.BodyB.Velocity - manifold.BodyA.Velocity;
+
+            // Early return of no or same velocity
+            if (Smol(relativeVelocity))
+                return;
 
             // Calculate relative velocity in terms of the normal direction
             var relativeVelocityAlongNormal = Vector2.Dot(relativeVelocity, manifold.Normal);
@@ -34,9 +52,12 @@ namespace Skoggy.Grove.Physics
             // Calculate restitution
             var restitution = MathF.Min(manifold.ShapeA.Material.Restitution, manifold.ShapeB.Material.Restitution);
 
+            var inverseMassSum = (manifold.BodyA.InverseMass + manifold.BodyB.InverseMass);
+            if (inverseMassSum <= 0f) return;
+
             // Calculate impulse scalar
             var impulseScalar = -(1f + restitution) * relativeVelocityAlongNormal;
-            impulseScalar = impulseScalar / (manifold.BodyA.InverseMass + manifold.BodyB.InverseMass);
+            impulseScalar = impulseScalar / inverseMassSum;
 
             // Apply impulse
             var impulse = impulseScalar * manifold.Normal;
@@ -53,12 +74,31 @@ namespace Skoggy.Grove.Physics
         {
             // Solve for the tangent vector
             var tangent = relativeVelocity - Vector2.Dot(relativeVelocity, manifold.Normal) * manifold.Normal;
-            if (tangent == Vector2.Zero) return Vector2.Zero;
+            if (Smol(tangent)) return Vector2.Zero;
+            var tangetBeforeNormalized = tangent;
             tangent.Normalize();
+
+            if (float.IsNaN(tangent.X) || float.IsNaN(tangent.Y))
+            {
+
+            }
+
+            var inverseMassSum = (manifold.BodyA.InverseMass + manifold.BodyB.InverseMass);
+            if (inverseMassSum <= 0f) return Vector2.Zero;
+
+            if (float.IsNaN(inverseMassSum))
+            {
+
+            }
 
             // Solve for magnitude to apply along the friction vector
             var tangentScalar = -Vector2.Dot(relativeVelocity, tangent);
-            tangentScalar = tangentScalar / (manifold.BodyA.InverseMass + manifold.BodyB.InverseMass);
+            tangentScalar = tangentScalar / inverseMassSum;
+
+            if (float.IsNaN(tangentScalar))
+            {
+
+            }
 
             // PythagoreanSolve = A^2 + B^2 = C^2, solving for C given A and B
             // Use to approximate mu given friction coefficients of each body
@@ -74,6 +114,11 @@ namespace Skoggy.Grove.Physics
                 var dynamicFriction = CalculateFriction(manifold.ShapeA.Material.DynamicFriction, manifold.ShapeB.Material.DynamicFriction);
                 return -impulseScalar * tangent * dynamicFriction;
             }
+        }
+
+        private static bool Smol(Vector2 vector)
+        {
+            return MathF.Abs(vector.X) < FloatZeroDelta && MathF.Abs(vector.Y) < FloatZeroDelta;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
