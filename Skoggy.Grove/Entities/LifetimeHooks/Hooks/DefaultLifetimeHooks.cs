@@ -64,7 +64,7 @@ namespace Skoggy.Grove.Entities.LifetimeHooks.Hooks
             var entities = entityWorld.Entities;
 
             // TODO: NO; BAD GC!!
-            var renderables = entities.SelectMany(x => x.Components.Where(f => f.Enabled && f is IRender))
+            var renderables = entities.SelectMany(x => x.Components.Where(f => f.Enabled && f is IRender && f.Initialized))
                 .Cast<IRender>()
                 .GroupBy(x => x.Layer)
                 .OrderBy(x => x.Key);

@@ -22,6 +22,12 @@ namespace Skoggy.Grove.Entities
 
         internal readonly ComponentActionCache ComponentActionCache;
         internal DesynchronizedList<Entity> Entities => _entities;
+
+        public object Find(object arena)
+        {
+            throw new NotImplementedException();
+        }
+
         internal readonly LayerConfiguration LayerConfiguration;
 
         internal List<IEntityModule> _modules;
@@ -129,6 +135,9 @@ namespace Skoggy.Grove.Entities
                 if (entity.Name == name) yield return entity;
             }
         }
+
+        public T FindComponent<T>(string entityName) where T : Component
+            => Find(entityName)?.GetComponent<T>();
 
         public T FindComponent<T>() where T : Component
         {

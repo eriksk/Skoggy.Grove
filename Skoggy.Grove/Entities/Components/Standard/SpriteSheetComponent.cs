@@ -13,9 +13,15 @@ namespace Skoggy.Grove.Entities.Components.Standard
 
         public void Initialize()
         {
-            SpriteSheet = new SpriteSheet(
-                GameContext.Content.Load<Texture2D>(Path),
-                CellSize);
+            if (SpriteSheet == null)
+            {
+                SpriteSheet = new SpriteSheet(
+                    GameContext.Content.Load<Texture2D>(Path),
+                    CellSize);
+                return;
+            }
+
+            CellSize = SpriteSheet.CellWidth;
         }
     }
 }
