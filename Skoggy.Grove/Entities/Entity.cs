@@ -28,7 +28,7 @@ namespace Skoggy.Grove.Entities
         {
             if (Deleted) return;
             
-            World.Entities.Remove(this);
+            World.Remove(this);
             Deleted = true;
         }
 

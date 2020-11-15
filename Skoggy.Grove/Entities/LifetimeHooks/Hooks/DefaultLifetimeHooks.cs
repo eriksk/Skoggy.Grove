@@ -26,6 +26,19 @@ namespace Skoggy.Grove.Entities.LifetimeHooks.Hooks
             }
         }
 
+        public void OnDelete(EntityWorld entityWorld, Entity entity)
+        {
+            var entities = entityWorld.Entities;
+
+            foreach (var component in entity.Components)
+            {
+                if (component is IOnDestroy destructable)
+                {
+                    destructable.OnDestroy();
+                }
+            }
+        }
+
         public void Update(EntityWorld entityWorld)
         {
             // TODO: Maybe we can do a prepare step and group all components into a list of the action interfaces that we want to use

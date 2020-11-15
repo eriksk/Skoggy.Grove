@@ -17,7 +17,7 @@ namespace Skoggy.Grove.Entities.Components.Standard
         public void Initialize()
         {
             _spriteSheet = GetComponent<SpriteSheetComponent>();
-            if(Map == null)
+            if (Map == null)
             {
                 Map = GameContext.Content.LoadTmxMap(Path);
             }
@@ -25,7 +25,7 @@ namespace Skoggy.Grove.Entities.Components.Standard
 
         public override void Render(SpriteBatch spriteBatch, GraphicsDevice graphics)
         {
-            if(Map == null) return;
+            if (Map == null) return;
 
             var mapOffset = Entity.WorldPosition;
             var texture = _spriteSheet.SpriteSheet.Texture;
@@ -33,25 +33,25 @@ namespace Skoggy.Grove.Entities.Components.Standard
 
             // TODO: Culling
 
-            foreach(var layer in Map.Layers)
+            foreach (var layer in Map.Layers)
             {
-                foreach(var chunk in layer.Chunks)
+                foreach (var chunk in layer.Chunks)
                 {
                     var chunkOffset = mapOffset + new Vector2(chunk.X * cellSize, chunk.Y * cellSize);
 
-                    for(var x = 0; x < chunk.Width; x++)
+                    for (var x = 0; x < chunk.Width; x++)
                     {
-                        for(var y = 0; y < chunk.Height; y++)
+                        for (var y = 0; y < chunk.Height; y++)
                         {
                             var cell = chunk.Data[x + y * chunk.Width] - 1;
-                            if(cell < 0) continue;
+                            if (cell < 0) continue;
 
                             var source = _spriteSheet.SpriteSheet[cell];
                             var cellPosition = new Vector2(
                                 x * _spriteSheet.CellSize,
                                 y * _spriteSheet.CellSize
                             );
-                                            
+
                             spriteBatch.Draw(
                                 texture,
                                 chunkOffset + cellPosition,

@@ -35,6 +35,7 @@ namespace Skoggy.Grove.Entities.Modules
             _physicsDebugger = new MonoGameDebugView(_world);
             _physicsDebugger.LoadContent(GameContext.Graphics, spriteFont);
             _physicsDebugger.Enabled = true;
+            // _physicsDebugger.Flags = (DebugViewFlags)int.MaxValue;
         }
 
         public void Update()

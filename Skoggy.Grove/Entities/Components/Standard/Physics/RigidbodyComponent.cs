@@ -8,7 +8,7 @@ using Skoggy.Grove.Entities.Modules;
 
 namespace Skoggy.Grove.Entities.Components.Standard.Physics
 {
-    public class Rigidbody : Component, IInitialize, IUpdate
+    public class Rigidbody : Component, IInitialize, IUpdate, IOnDestroy
     {
         internal Body Body;
 
@@ -32,6 +32,13 @@ namespace Skoggy.Grove.Entities.Components.Standard.Physics
             Body.FixedRotation = FixedRotation;
 
             _initialized = true;
+        }
+
+        public void OnDestroy()
+        {
+            // TODO: Do we need to remove fixtures separately?
+            var physicsModule = World.GetModule<PhysicsEntityModule>();
+            physicsModule.World.RemoveBody(Body);
         }
 
         public void MovePosition(Vector2 position)

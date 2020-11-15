@@ -11,5 +11,10 @@ namespace Skoggy.Grove.Maths
         {
             return min + (max - min) * (float)_random.NextDouble();
         }
+
+        public static float Rotation()
+        {
+            return Next(-MathF.PI, MathF.PI);
+        }
     }
 }

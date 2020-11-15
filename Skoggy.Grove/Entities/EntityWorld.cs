@@ -16,13 +16,14 @@ namespace Skoggy.Grove.Entities
     {
         private DesynchronizedList<Entity> _entities;
 
-        private int _entityIdCount;
+        private int _entityIdCount = 1;
         private ILifetimeHooks _lifetimeHooks;
         private Camera2D _camera;
 
         internal readonly ComponentActionCache ComponentActionCache;
         internal DesynchronizedList<Entity> Entities => _entities;
         internal readonly LayerConfiguration LayerConfiguration;
+
         internal List<IEntityModule> _modules;
         public Camera2D Camera => _camera;
 
@@ -64,6 +65,12 @@ namespace Skoggy.Grove.Entities
             var entity = new Entity(name, this);
             _entities.Add(entity);
             return entity;
+        }
+        
+        internal void Remove(Entity entity)
+        {
+            _lifetimeHooks.OnDelete(this, entity);
+            Entities.Remove(entity);
         }
 
         public void Update()
