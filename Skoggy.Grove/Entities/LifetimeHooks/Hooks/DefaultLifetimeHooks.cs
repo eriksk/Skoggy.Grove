@@ -15,13 +15,20 @@ namespace Skoggy.Grove.Entities.LifetimeHooks.Hooks
             {
                 foreach (var component in entity.Components)
                 {
-                    if (!component.Enabled) continue;
-                    if (component.Initialized) continue;
+                    if (!component.Enabled)
+                    {
+                        continue;
+                    }
+                    if (component.Initialized)
+                    {
+                        continue;
+                    }
                     if (component is IInitialize initialize)
                     {
                         initialize.Initialize();
-                        component.Initialized = true;
                     }
+                    
+                    component.Initialized = true;
                 }
             }
         }

@@ -57,5 +57,9 @@ namespace Skoggy.Grove.Entities.Modules
                 _physicsDebugger.RenderDebugData(_projection, EntityWorld.Camera.PhysicsView);
             }
         }
+
+        public void PreRender(Matrix view)
+        {
+        }
     }
 }

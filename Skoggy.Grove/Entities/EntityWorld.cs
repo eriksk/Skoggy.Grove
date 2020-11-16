@@ -102,6 +102,12 @@ namespace Skoggy.Grove.Entities
             {
                 entity.Components.Sync();
             }
+            
+            foreach(var module in _modules)
+            {
+                module.PreRender(_camera.View);
+            }
+
             _lifetimeHooks.Render(this, spriteBatch, graphics, _camera.View);
             
             foreach(var module in _modules)

@@ -7,5 +7,6 @@ namespace Skoggy.Grove.Entities.Modules
         EntityWorld EntityWorld { get; set; }
         void Update();
         void Render(Matrix cameraView);
+        void PreRender(Matrix view);
     }
 }
