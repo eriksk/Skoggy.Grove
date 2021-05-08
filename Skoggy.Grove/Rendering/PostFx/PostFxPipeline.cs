@@ -78,11 +78,11 @@ namespace Skoggy.Grove.Rendering.PostFx
             }
 
             // TODO: Source to backbuffer
-            // SetTarget(null);
-            // GameContext.Graphics.Clear(Color.Magenta);
-            // _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied);
-            // _spriteBatch.Draw(source, new Rectangle(0, 0, source.Width, source.Height), Color.White);
-            // _spriteBatch.End();
+            SetTarget(null);
+            GameContext.Graphics.Clear(Color.Magenta);
+            _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied);
+            _spriteBatch.Draw(source, new Rectangle(0, 0, source.Width, source.Height), Color.White);
+            _spriteBatch.End();
         }
     }
 
@@ -111,6 +111,19 @@ namespace Skoggy.Grove.Rendering.PostFx
                 null,
                 Effect);
             spriteBatch.Draw(source, new Rectangle(0, 0, source.Width, source.Height), Color.White);
+            spriteBatch.End();
+        }
+
+        public void Blit(SpriteBatch spriteBatch, Texture2D texture, RenderTarget2D renderTarget, Effect effect)
+        {
+            Pipeline.SetTarget(renderTarget);
+            Blit(spriteBatch, texture, renderTarget.Width, renderTarget.Height, effect);
+        }
+
+        public void Blit(SpriteBatch spriteBatch, Texture2D texture, int width, int height, Effect effect)
+        {
+            spriteBatch.Begin(0, BlendState.Opaque, null, null, null, effect);
+            spriteBatch.Draw(texture, new Rectangle(0, 0, width, height), Color.White);
             spriteBatch.End();
         }
     }

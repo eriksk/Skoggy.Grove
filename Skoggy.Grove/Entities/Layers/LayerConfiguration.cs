@@ -28,7 +28,7 @@ namespace Skoggy.Grove.Entities.Layers
             return _defaultConfiguration;
         }
 
-        public void AddLayer(int layer, LayerConfigurationInfo config)
+        public LayerConfiguration AddLayer(int layer, LayerConfigurationInfo config)
         {
             if (_configurations.ContainsKey(layer))
             {
@@ -36,6 +36,7 @@ namespace Skoggy.Grove.Entities.Layers
             }
 
             _configurations.Add(layer, config);
+            return this;
         }
     }
 }

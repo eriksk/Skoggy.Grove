@@ -27,7 +27,7 @@ namespace Skoggy.Grove.Entities
         public void Delete()
         {
             if (Deleted) return;
-            
+
             World.Remove(this);
             Deleted = true;
         }
@@ -116,5 +116,23 @@ namespace Skoggy.Grove.Entities
             Matrix.CreateRotationZ(WorldRotation) *
             Matrix.CreateTranslation(WorldPosition.X, WorldPosition.Y, 0f);
 
+
+        /// <summary>
+        /// Finds the immidiate child by name
+        /// </summary>
+        /// <param name="name">Name of the child</param>
+        /// <returns></returns>
+        public Entity FindChild(string name)
+        {
+            foreach (var child in Children)
+            {
+                if (child.Name == name)
+                {
+                    return child;
+                }
+            }
+
+            return null;
+        }
     }
 }

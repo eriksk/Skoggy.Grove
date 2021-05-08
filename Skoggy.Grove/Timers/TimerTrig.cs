@@ -5,7 +5,7 @@ namespace Skoggy.Grove.Timers
 {
     public class TimerTrig
     {
-        public float Duration { get; }
+        public float Duration { get; private set; }
         private float _current;
 
         public TimerTrig(float duration)
@@ -21,6 +21,12 @@ namespace Skoggy.Grove.Timers
         public void Reset()
         {
             _current = 0f;
+        }
+
+        public void Reset(float newDuration)
+        {
+            _current = 0f;
+            Duration = newDuration;
         }
 
         public TimerUpdateResult Update(float dt)

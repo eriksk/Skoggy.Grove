@@ -6,7 +6,7 @@ namespace Skoggy.Grove.Extensions
 {
     public static class SpriteBatchExtensions
     {
-        public static void DrawLine(this SpriteBatch sb, Vector2 start, Vector2 end, Color color)
+        public static void DrawLine(this SpriteBatch sb, Vector2 start, Vector2 end, Color color, float thickness = 1f)
         {
             var direction = (end - start);
             direction.Normalize();
@@ -19,7 +19,7 @@ namespace Skoggy.Grove.Extensions
                 color,
                 direction.ToAngle(),
                 new Vector2(0f, 0.5f),
-                new Vector2(distance, 1f),
+                new Vector2(distance, thickness),
                 SpriteEffects.None, 0f);
         }
 
