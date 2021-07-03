@@ -17,6 +17,11 @@ namespace Skoggy.Grove.Entities.Components.Standard
         {
             if (Texture == null) return;
 
+            if (Source == Rectangle.Empty)
+            {
+                Source = new Rectangle(0, 0, Texture.Width, Texture.Height);
+            }
+
             var origin = new Vector2(Source.Width, Source.Height) * Pivot;
 
             spriteBatch.Draw(

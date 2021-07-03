@@ -32,7 +32,7 @@ namespace Skoggy.Grove.Timers
                 _fpsQueue.Dequeue();
             }
 
-            FPS = (int)(1000f / (_fpsQueue.Average(x => x) * 1000f)) + 1;
+            FPS = (int)(1000f / (_fpsQueue.Average(x => x) * 1000f));
         }
     }
 }

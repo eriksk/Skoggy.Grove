@@ -14,20 +14,29 @@ namespace Skoggy.Grove.Contexts
         public static Point RenderResolution { get; private set; }
         public static event Action OnResolutionChanged;
         private static Game _game;
+        private static bool _scaleRenderResolution;
 
         public static void Initialize(
-            Game game, 
-            ContentManager content, 
+            Game game,
+            ContentManager content,
             GraphicsDevice graphics,
-            Point renderResolution)
+            Point? renderResolution)
         {
             _game = game;
             Content = content;
             Graphics = graphics;
             Pixel = new Texture2D(graphics, 1, 1);
             Pixel.SetData(new[] { Color.White });
-            RenderResolution = renderResolution;
 
+            _scaleRenderResolution = !renderResolution.HasValue;
+            if (!_scaleRenderResolution)
+            {
+                RenderResolution = renderResolution.Value;
+            }
+            else
+            {
+                RenderResolution = new Point(Graphics.Viewport.Width, Graphics.Viewport.Height);
+            }
             Resolution = new Point(Graphics.Viewport.Width, Graphics.Viewport.Height);
             game.Window.ClientSizeChanged += ResolutionChanged;
         }
@@ -50,6 +59,10 @@ namespace Skoggy.Grove.Contexts
         private static void ResolutionChanged(object sender, EventArgs e)
         {
             Resolution = new Point(Graphics.Viewport.Width, Graphics.Viewport.Height);
+            if(_scaleRenderResolution)
+            {
+                RenderResolution = Resolution;
+            }
             OnResolutionChanged?.Invoke();
         }
     }

@@ -22,12 +22,6 @@ namespace Skoggy.Grove.Entities
 
         internal readonly ComponentActionCache ComponentActionCache;
         internal DesynchronizedList<Entity> Entities => _entities;
-
-        public object Find(object arena)
-        {
-            throw new NotImplementedException();
-        }
-
         internal readonly LayerConfiguration LayerConfiguration;
 
         internal List<IEntityModule> _modules;
@@ -43,6 +37,8 @@ namespace Skoggy.Grove.Entities
             ComponentActionCache = new ComponentActionCache();
             _modules = new List<IEntityModule>();
             _camera = new Camera2D();
+
+            RegisterModule(new CoroutineModule());
         }
 
         internal int NextEntityId() => _entityIdCount++;
@@ -72,7 +68,7 @@ namespace Skoggy.Grove.Entities
             _entities.Add(entity);
             return entity;
         }
-        
+
         internal void Remove(Entity entity)
         {
             _lifetimeHooks.OnDelete(this, entity);
@@ -88,8 +84,8 @@ namespace Skoggy.Grove.Entities
             }
             _lifetimeHooks.Initialize(this);
             _lifetimeHooks.Update(this);
-            
-            foreach(var module in _modules)
+
+            foreach (var module in _modules)
             {
                 module.Update();
             }
@@ -102,15 +98,15 @@ namespace Skoggy.Grove.Entities
             {
                 entity.Components.Sync();
             }
-            
-            foreach(var module in _modules)
+
+            foreach (var module in _modules)
             {
                 module.PreRender(_camera.View);
             }
 
             _lifetimeHooks.Render(this, spriteBatch, graphics, _camera.View);
-            
-            foreach(var module in _modules)
+
+            foreach (var module in _modules)
             {
                 module.Render(_camera.View);
             }
@@ -165,11 +161,11 @@ namespace Skoggy.Grove.Entities
         public IEnumerable<T> FindAllComponents<T>() where T : Component
         {
             // TODO: FASTER HARDER NO GARBEJE COLLECTSION
-            foreach(var entity in _entities)
+            foreach (var entity in _entities)
             {
-                foreach(var component in entity.Components)
+                foreach (var component in entity.Components)
                 {
-                    if(component is T typedComponent)
+                    if (component is T typedComponent)
                     {
                         yield return typedComponent;
                     }

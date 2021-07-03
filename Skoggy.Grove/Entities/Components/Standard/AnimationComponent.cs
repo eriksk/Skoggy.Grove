@@ -2,6 +2,7 @@
 using Skoggy.Grove.Entities.Actions;
 using Skoggy.Grove.Timers;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Skoggy.Grove.Entities.Components.Standard
 {
@@ -27,6 +28,8 @@ namespace Skoggy.Grove.Entities.Components.Standard
             _renderer = GetComponent<SpriteRenderer>();
             _sprites = GetComponent<SpriteSheetComponent>();
             _renderer.Texture = _sprites.SpriteSheet.Texture;
+
+            Play(Animations.Keys.First());
         }
 
         public void Update()
